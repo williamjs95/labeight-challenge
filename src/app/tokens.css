@@ -1,0 +1,113 @@
+/*
+ * Design tokens.
+ * Primitives hold the raw values; semantic tokens give them meaning.
+ * Styles should only use semantic/component tokens, never primitives or literals.
+ */
+:root {
+  /* ---------- Primitives: color ---------- */
+  --gray-0: #ffffff;
+  --gray-50: #fafafa;
+  --gray-100: #f4f4f4;
+  --gray-150: #f0f0f0;
+  --gray-300: #dddddd;
+  --gray-600: #666666;
+  --gray-900: #1a1a1a;
+  --blue-600: #0b5cad;
+  --indigo-50: #eeeeff;
+  --amber-50: #fff4d6;
+  --red-50: #fdecee;
+  --red-200: #f3b5bd;
+  --red-700: #b00020;
+
+  /* ---------- Primitives: spacing ---------- */
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 8px;
+  --space-5: 12px;
+  --space-6: 14px;
+  --space-7: 16px;
+  --space-8: 18px;
+  --space-9: 24px;
+  --space-10: 64px;
+
+  /* ---------- Primitives: shape ---------- */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-pill: 10px;
+  --border-width-thin: 1px;
+
+  /* ---------- Primitives: typography ---------- */
+  --font-family-base: system-ui, -apple-system, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.85rem;
+  --font-size-md: 0.875rem;
+  --font-size-lg: 1.1rem;
+  --font-size-xl: 1.5rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* ---------- Primitives: layout ---------- */
+  --size-content-max: 640px;
+  --size-input-max: 320px;
+  --size-full: 100%;
+
+  /* ---------- Semantic: color ---------- */
+  --color-bg: var(--gray-50);
+  --color-surface: var(--gray-0);
+  --color-surface-code: var(--gray-100);
+  --color-text: var(--gray-900);
+  --color-text-muted: var(--gray-600);
+  --color-text-on-accent: var(--gray-0);
+  --color-border: var(--gray-300);
+  --color-divider: var(--gray-150);
+  --color-accent: var(--blue-600);
+  --color-badge-bg: var(--indigo-50);
+  --color-warning-bg: var(--amber-50);
+  --color-danger-text: var(--red-700);
+  --color-danger-bg: var(--red-50);
+  --color-danger-border: var(--red-200);
+
+  /* ---------- Semantic: typography ---------- */
+  --text-heading-1: var(--font-size-xl);
+  --text-heading-2: var(--font-size-lg);
+  --text-body-sm: var(--font-size-md);
+  --text-code: var(--font-size-sm);
+  --text-badge: var(--font-size-xs);
+
+  /* ---------- Component tokens ---------- */
+  --page-padding-top: var(--space-9);
+  --page-padding-x: var(--space-7);
+  --page-padding-bottom: var(--space-10);
+
+  --card-padding: var(--space-7);
+  --card-gap: var(--space-7);
+  --card-radius: var(--radius-md);
+
+  --code-padding: var(--space-5);
+  --code-radius: var(--radius-sm);
+
+  --row-padding-y: var(--space-3);
+  --row-gap: var(--space-4);
+
+  --question-gap: var(--space-3);
+  --question-spacing: var(--space-8);
+  --choices-gap: var(--space-6);
+  --choice-gap: var(--space-2);
+
+  --input-padding-y: var(--space-3);
+  --input-padding-x: var(--space-4);
+
+  --badge-padding-y: var(--space-1);
+  --badge-padding-x: var(--space-4);
+  --badge-offset: var(--space-3);
+  --badge-radius: var(--radius-pill);
+
+  --button-padding-y: var(--space-5);
+  --button-padding-x: var(--space-7);
+  --button-radius: var(--radius-sm);
+
+  --toolbar-gap: var(--space-4);
+}

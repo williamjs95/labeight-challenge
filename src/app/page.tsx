@@ -1,3 +1,4 @@
+import { AppHeader } from "@/components/AppHeader";
 import { QuoteApp } from "@/components/QuoteApp";
 import { isValidIsoDate, toIsoDate } from "@/lib/transforms/dates";
 
@@ -9,7 +10,7 @@ interface PageProps {
   searchParams: Promise<{ today?: string | string[] }>;
 }
 
-export default async function Page({ searchParams }: PageProps) {
+export default async function Page({ searchParams }: Readonly<PageProps>) {
   const { today: param } = await searchParams;
   const today =
     typeof param === "string" && isValidIsoDate(param)
@@ -17,8 +18,8 @@ export default async function Page({ searchParams }: PageProps) {
       : toIsoDate(new Date());
 
   return (
-    <main>
-      <h1>Renters quote: Harbor Assurance</h1>
+    <main className="page">
+      <AppHeader />
       <QuoteApp today={today} />
     </main>
   );

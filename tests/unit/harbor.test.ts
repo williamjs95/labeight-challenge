@@ -14,7 +14,7 @@ describe("Harbor + profile A (Maya)", () => {
   const draft = draftFor();
 
   it("is eligible", () => {
-    expect(draft.eligibility).toEqual({ eligible: true, reasons: [] });
+    expect(draft.eligibility).toMatchObject({ eligible: true, reasons: [] });
   });
 
   it("classifies every field", () => {
@@ -94,7 +94,7 @@ describe("Harbor + profile B (Sam)", () => {
       value: 25000,
     });
     expect(resolutions.pets).toMatchObject({ status: "missing" }); // no dog != no pets
-    expect(resolutions.dog_breed).toEqual({ status: "missing" });
+    expect(resolutions.dog_breed).toMatchObject({ status: "missing" });
     expect(resolutions.claims_last_5_years).toMatchObject({
       status: "suggested",
       value: 1,
@@ -108,7 +108,7 @@ describe("Harbor mapping edge cases", () => {
     expect(
       draftFor(profile({ first_name: " Maya ", last_name: "" })).resolutions
         .applicant_full_name,
-    ).toEqual({
+    ).toMatchObject({
       status: "known",
       value: "Maya",
     });
@@ -142,7 +142,7 @@ describe("Harbor mapping edge cases", () => {
   it("accepts a ZIP+4", () => {
     expect(
       draftFor(profile({ zip: "97205-1234" })).resolutions.postal_code,
-    ).toEqual({ status: "known", value: "97205-1234" });
+    ).toMatchObject({ status: "known", value: "97205-1234" });
   });
 
   it("doesn't suggest coverage above Harbor's highest tier", () => {
@@ -158,7 +158,7 @@ describe("Harbor mapping edge cases", () => {
   it("maps breeds: case-insensitive match, unknown to Other, missing breed is asked", () => {
     expect(
       draftFor(profile({ dog_breed: "pit bull" })).resolutions.dog_breed,
-    ).toEqual({ status: "known", value: "Pit Bull" });
+    ).toMatchObject({ status: "known", value: "Pit Bull" });
     expect(
       draftFor(profile({ dog_breed: "Poodle" })).resolutions.dog_breed,
     ).toMatchObject({
@@ -182,7 +182,7 @@ describe("Harbor mapping edge cases", () => {
     // No pattern: any ZIP is accepted.
     expect(
       harborMapping.postal_code!(profile({ zip: "x" }), field("phone")),
-    ).toEqual({ status: "known", value: "x" });
+    ).toMatchObject({ status: "known", value: "x" });
   });
 
   it("is registered", () => {

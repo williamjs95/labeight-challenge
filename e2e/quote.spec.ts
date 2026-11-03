@@ -53,7 +53,7 @@ test("profile A: unchecking Dog hides the breed", async ({ page }) => {
 
 test("profile B: explains both reasons and shows no form", async ({ page }) => {
   await page.goto(URL);
-  await page.getByLabel("Customer profile").selectOption("B");
+  await page.getByLabel(/Profile B/).check();
 
   const alert = page.getByRole("alert", { name: /can't quote/ });
   await expect(alert).toContainText("Your profile says you live in Nevada");
@@ -62,6 +62,26 @@ test("profile B: explains both reasons and shows no form", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: /Get Harbor Assurance quote/ }),
   ).toHaveCount(0);
+
+  // Reviewers can still see why, in the inspector.
+  await page.getByRole("tab", { name: /Eligibility/ }).click();
+  await expect(page.getByText("Fails")).toHaveCount(2);
+});
+
+test("inspector: the live request updates as the customer types", async ({
+  page,
+}) => {
+  await page.goto(URL);
+  await page.getByRole("tab", { name: "Live request" }).click();
+  const live = page.getByTestId("live-request");
+  await expect(live).toContainText('"date_of_birth": "03/12/1994"');
+  await expect(live).not.toContainText("phone");
+
+  await page.getByLabel(/Mobile number/).fill("503-555-0142");
+  await expect(live).toContainText('"phone": "5035550142"');
+  await expect(page.getByTestId("still-needed")).toHaveText(
+    "Every required field has a value.",
+  );
 });
 
 test("ignores an invalid ?today and falls back to the real date", async ({
@@ -69,6 +89,6 @@ test("ignores an invalid ?today and falls back to the real date", async ({
 }) => {
   await page.goto("/?today=not-a-date");
   await expect(
-    page.getByRole("heading", { name: /Harbor Assurance/ }),
+    page.getByRole("heading", { level: 1, name: "Harbor Assurance quote" }),
   ).toBeVisible();
 });

@@ -146,7 +146,7 @@ describe("validateForm", () => {
 
 describe("checkEligibility", () => {
   it("passes when no rule fails", () => {
-    expect(checkEligibility(testCarrier, validValues, TODAY)).toEqual({
+    expect(checkEligibility(testCarrier, validValues, TODAY)).toMatchObject({
       eligible: true,
       reasons: [],
     });
@@ -166,7 +166,7 @@ describe("checkEligibility", () => {
     );
     expect(checkEligibility(testCarrier, {}, TODAY).eligible).toBe(true);
     const result = checkEligibility(testCarrier, { dob: "2010-01-01" }, TODAY, {
-      state: "Not served.",
+      tier: { status: "blocked", note: "Not served." },
     });
     expect(result.reasons).toHaveLength(2);
     expect(result.reasons[0]).toBe("Not served.");
@@ -220,7 +220,7 @@ describe("buildDraft", () => {
     const draft = buildDraft(MAYA, carrier, TODAY);
     expect(draft.resolutions.email).toEqual({ status: "missing" });
     expect(draft.values.name).toBe("Ana");
-    expect(draft.eligibility).toEqual({
+    expect(draft.eligibility).toMatchObject({
       eligible: false,
       reasons: [`We can't answer "Tier" in a way Test Mutual accepts.`],
     });

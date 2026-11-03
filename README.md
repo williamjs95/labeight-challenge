@@ -14,6 +14,18 @@ yarn e2e                # Playwright, builds and starts the app
 yarn typecheck && yarn eslint
 ```
 
+## Using the page
+
+1. **Choose a customer profile.** Each card shows whether Harbor can quote that customer before you open it.
+2. **From your profile.** These are the answers we already have. They aren't asked again, but each one can be edited.
+3. **A few more questions.** Only what the profile can't answer, plus derived answers to confirm, with a progress bar.
+4. **Ready to send.** The exact request Harbor receives, or a clear list of the reasons Harbor can't quote.
+
+The **Behind the scenes** panel is for reviewers and updates live:
+- **Field map:** every Harbor field, the profile field it came from, its status and the value that will be sent.
+- **Live request:** the request in Harbor's format as you type, plus the required keys still missing.
+- **Eligibility:** every rule checked, marked pass, fail or pending.
+
 ## How it works
 
 ```

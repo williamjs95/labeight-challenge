@@ -16,7 +16,6 @@ export function buildDraft(
 ): Draft {
   const resolutions: Record<string, Resolution> = {};
   const values: FormValues = {};
-  const blocked: Record<string, string> = {};
 
   for (const field of carrier.form.fields) {
     const resolver = carrier.mapping[field.key];
@@ -25,16 +24,11 @@ export function buildDraft(
       : { status: "missing" };
     resolutions[field.key] = resolution;
     values[field.key] = resolution.value;
-    if (resolution.status === "blocked") {
-      blocked[field.key] =
-        resolution.note ??
-        `We can't answer "${field.label}" in a way ${carrier.displayName} accepts.`;
-    }
   }
 
   return {
     resolutions,
     values,
-    eligibility: checkEligibility(carrier, values, today, blocked),
+    eligibility: checkEligibility(carrier, values, today, resolutions),
   };
 }

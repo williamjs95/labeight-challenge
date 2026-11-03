@@ -14,6 +14,11 @@ interface Props {
   describedBy?: string;
 }
 
+/** Fields rendered as a group of options. Callers wrap these in a <fieldset>. */
+export function isGroupField(field: FieldDef): boolean {
+  return field.type === "multiselect" || field.type === "boolean";
+}
+
 /** Renders one carrier field, purely from its definition. Knows nothing about any carrier. */
 export function FieldInput({
   field,
@@ -22,7 +27,7 @@ export function FieldInput({
   min,
   invalid,
   describedBy,
-}: Props) {
+}: Readonly<Props>) {
   const id = `field-${field.key}`;
   const common = {
     id,
@@ -39,6 +44,7 @@ export function FieldInput({
       return (
         <input
           {...common}
+          className="input"
           type={field.type}
           required={field.required}
           value={typeof value === "string" ? value : ""}
@@ -51,6 +57,7 @@ export function FieldInput({
       return (
         <input
           {...common}
+          className="input"
           type="number"
           step={1}
           min={Number.isFinite(lowerBound) ? lowerBound : undefined}
@@ -67,6 +74,7 @@ export function FieldInput({
       return (
         <select
           {...common}
+          className="input"
           required={field.required}
           value={value === undefined ? "" : String(value)}
           onChange={(e) =>
@@ -87,13 +95,7 @@ export function FieldInput({
     case "multiselect": {
       const selected = Array.isArray(value) ? value : [];
       return (
-        <div
-          className="choices"
-          id={id}
-          role="group"
-          aria-labelledby={`${id}-label`}
-          aria-describedby={describedBy}
-        >
+        <div className="choices" id={id}>
           {field.options.map((option) => (
             <label key={option} className="choice">
               <input
@@ -118,13 +120,7 @@ export function FieldInput({
       if (!field.required)
         choices.push({ label: "Not sure", value: undefined });
       return (
-        <div
-          className="choices"
-          id={id}
-          role="radiogroup"
-          aria-labelledby={`${id}-label`}
-          aria-describedby={describedBy}
-        >
+        <div className="choices" id={id}>
           {choices.map((choice) => (
             <label key={choice.label} className="choice">
               <input

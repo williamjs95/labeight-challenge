@@ -1,5 +1,6 @@
 "use client";
 
+import { asList } from "@/lib/engine/visibility";
 import { toggleOption } from "@/lib/transforms/options";
 import type { FieldDef } from "@/lib/types/fieldDef";
 import type { FieldValue } from "@/lib/types/fieldValue";
@@ -93,7 +94,7 @@ export function FieldInput({
       );
 
     case "multiselect": {
-      const selected = Array.isArray(value) ? value : [];
+      const selected = asList(value) ?? [];
       return (
         <div className="choices" id={id}>
           {field.options.map((option) => (

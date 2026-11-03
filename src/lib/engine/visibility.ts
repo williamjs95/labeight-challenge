@@ -24,9 +24,13 @@ export function isVisible(
   const parent = form.fields.find((f) => f.key === showIf.field);
   if (!parent || !isVisible(parent, values, form)) return false;
   const value = values[showIf.field];
-  return Array.isArray(value)
-    ? value.includes(showIf.includes)
-    : value === showIf.includes;
+  const list = asList(value);
+  return list ? list.includes(showIf.includes) : value === showIf.includes;
+}
+
+/** The value as a list of options when it is one (multiselect), otherwise undefined. */
+export function asList(value: FieldValue): readonly string[] | undefined {
+  return Array.isArray(value) ? value : undefined;
 }
 
 export function visibleFields(

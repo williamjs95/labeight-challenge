@@ -68,7 +68,7 @@ describe("Harbor + profile A (Maya)", () => {
       resolutions: draft.resolutions,
       confirmed: new Set(),
     });
-    expect(Object.keys(errors).sort()).toEqual([
+    expect(Object.keys(errors).sort((a, b) => a.localeCompare(b))).toEqual([
       "claims_last_5_years",
       "contents_coverage",
       "pets",

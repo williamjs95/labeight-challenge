@@ -369,7 +369,7 @@ describe("Small components", () => {
 function Harness({
   field,
   initial,
-}: Readonly<{ field: FieldDef; initial?: FieldValue }>) {
+}: Readonly<{ field: FieldDef; initial?: Exclude<FieldValue, undefined> }>) {
   const [value, setValue] = useState<FieldValue>(initial);
   return (
     <>

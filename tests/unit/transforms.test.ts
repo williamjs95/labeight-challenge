@@ -12,6 +12,7 @@ import {
   smallestOptionAtLeast,
   toggleOption,
 } from "@/lib/transforms/options";
+import { isEmail } from "@/lib/transforms/email";
 import { normalizeUsPhone } from "@/lib/transforms/phone";
 import { stateName } from "@/lib/transforms/states";
 
@@ -83,6 +84,26 @@ describe("options", () => {
     expect(humanList(["A"])).toBe("A");
     expect(humanList(["A", "B", "C"])).toBe("A, B and C");
     expect(formatUsd(32000)).toBe("$32,000");
+  });
+});
+
+describe("email", () => {
+  it("accepts plain addresses and rejects malformed ones", () => {
+    expect(isEmail(" maya@example.com ")).toBe(true);
+    expect(isEmail("a@b.co")).toBe(true);
+    expect(isEmail("maya example.com")).toBe(false);
+    expect(isEmail("a b@example.com")).toBe(false);
+    expect(isEmail("a@b@example.com")).toBe(false);
+    expect(isEmail("@example.com")).toBe(false);
+    expect(isEmail("a@.com")).toBe(false);
+    expect(isEmail("a@example.")).toBe(false);
+    expect(isEmail("a@localhost")).toBe(false);
+  });
+
+  it("stays fast on adversarial input", () => {
+    const start = performance.now();
+    expect(isEmail(`${"a".repeat(50_000)}@${"b.".repeat(50_000)}`)).toBe(false);
+    expect(performance.now() - start).toBeLessThan(200);
   });
 });
 

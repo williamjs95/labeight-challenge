@@ -33,7 +33,7 @@ CustomerProfile ──► carrier mapping ──► Draft (value + status per fi
   (ours)            (per carrier)         + eligibility                      (generic)     (carrier formats)
 ```
 
-Only `src/lib/carriers/harbor/` is Harbor-specific. That folder holds the form JSON verbatim plus `mapping.ts`. Everything else (`engine/`, `transforms/`, `components/`) is generic and is driven by the JSON.
+The mapping logic for Harbor lives only in `src/lib/carriers/harbor/`: the form JSON verbatim plus `mapping.ts`. The engine (`engine/`, `transforms/`) and the form renderer (`FieldInput`, `QuestionCard`) are generic and driven by the JSON. The page shell (`AppHeader`, `QuoteApp`) picks the Harbor carrier, and a few inspector labels still say "Harbor". Those would read the carrier's `displayName` once there's more than one carrier.
 
 **Each field gets a status** that decides what the customer sees:
 
@@ -89,7 +89,8 @@ All reasons are shown at once. Sample profile **B (Sam)** gets two: Nevada isn't
 - Real submission with Harbor's error responses mapped back onto fields.
 - Phone handling with libphonenumber/E.164, and a ZIP-to-state consistency check.
 - Saving newly collected answers (phone, other pets, 5-year claims) back to the profile so the next carrier doesn't ask again.
-- An accessibility pass with axe and screen-reader testing, plus nicer UI for the confirm flow.
+- An accessibility pass with axe and screen-reader testing.
+- A carrier switcher, so the same profile can be compared across several carriers on one page.
 - Measured e2e coverage (Istanbul-instrumented build). Today the e2e suite covers every route and both sample profiles, but it isn't measured.
 
 ## Scaling to 50 carriers
@@ -104,12 +105,17 @@ All reasons are shown at once. Sample profile **B (Sam)** gets two: Nevada isn't
 ```
 src/lib/schema.ts               strict zod schema for carrier forms
 src/lib/types/                  one file per shared type (customerProfile.ts, resolution.ts, carrier.ts, …)
-src/lib/transforms/             carrier-agnostic helpers (dates, states, options, phone)
-src/lib/engine/                 buildDraft, eligibility, validate, visibility, serialize, display
+src/lib/transforms/             carrier-agnostic helpers (dates, states, options, phone, email)
+src/lib/engine/                 buildDraft, eligibility, validate, visibility, serialize, status, display
 src/lib/carriers/harbor/        form.json (verbatim) + mapping.ts
-src/components/                 generic form renderer + flow
+src/components/                 form renderer, quote flow and the "Behind the scenes" inspector
 src/app/page.tsx                the page
-src/app/tokens.css              design tokens (primitives + semantic); globals.css only uses var(--…)
+src/app/tokens.css              design tokens (primitives + semantic, light and dark); globals.css only uses var(--…)
 tests/unit/                     Vitest (lib + components)
 e2e/                            Playwright
+.github/workflows/ci.yml        CI: lint, typecheck, unit tests (100% coverage threshold), e2e
 ```
+
+## Quality checks
+- **CI** (GitHub Actions) runs on every push to `main` and on every pull request: ESLint, typecheck, unit tests with a 100% coverage threshold, and the Playwright e2e suite.
+- **ESLint** includes `eslint-plugin-sonarjs`, the same JS/TS rules SonarQube and SonarLint use, so Sonar issues fail the build.
